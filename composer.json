@@ -1,0 +1,17 @@
+{
+    "name": "mdagostino/dependencyresolver",
+    "description": "Generic dependency resolver. Returns a flat array of components to load them respecting their dependencies.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mariano D'Agostino",
+            "email": "mariano@cuencodigital.com"
+        }
+    ],
+    "require": {
+
+    },
+    "autoload": {
+        "psr-0": {"mdagostino": "src/"}
+    }
+}

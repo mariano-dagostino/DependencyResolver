@@ -18,10 +18,10 @@ $resolver
 $ordered = $resolver->resolveDependencies();
 print_r($ordered);
 // Prints:
-// 3
-// 4
-// 1
-// 2
+// ITEM 3
+// ITEM 4
+// ITEM 1
+// ITEM 2
 ```
 
 ## Features

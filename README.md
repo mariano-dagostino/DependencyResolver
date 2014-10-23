@@ -1,5 +1,7 @@
 # Dependency Resolver
 
+[![Build Status](https://travis-ci.org/mariano-dagostino/DependencyResolver.svg?branch=master)](https://travis-ci.org/mariano-dagostino/DependencyResolver)
+
 This package allows to define a set of generic components that depends on other components. The DependencyResolver will then define the order of loading of those components.
 
 ## Basic usage

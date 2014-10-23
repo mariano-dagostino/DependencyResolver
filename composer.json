@@ -1,6 +1,7 @@
 {
     "name": "mdagostino/dependencyresolver",
     "description": "Generic dependency resolver. Returns a flat array of components to load them respecting their dependencies.",
+    "keywords": ["dependency", "generic", "resolver"],
     "license": "MIT",
     "authors": [
         {

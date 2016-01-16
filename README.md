@@ -26,7 +26,7 @@ print_r($ordered);
 // ITEM 2
 ```
 
-## Features
+## Features.
 
 ### Circular dependency detection.
 

@@ -7,9 +7,9 @@ class DependencyResolverTest extends \PHPUnit_Framework_TestCase {
   public function testBasicBehaviour() {
     $resolver = new DependencyResolver();
     $resolver
-      ->addComponent('A')
-      ->addComponent('B', array('A'))
-      ->addComponent('C', array('B'));
+      ->component('A')
+      ->component('B')->requires('A')
+      ->component('C')->requires('B');
 
     $this->assertEquals($resolver->resolveDependencies(),
                   array('A', 'B', 'C'));
@@ -19,11 +19,11 @@ class DependencyResolverTest extends \PHPUnit_Framework_TestCase {
   public function testSuffle() {
     $resolver = new DependencyResolver();
     $resolver
-      ->addComponent('E', array('B', 'C'))
-      ->addComponent('A')
-      ->addComponent('B')
-      ->addComponent('C', array('A', 'D'))
-      ->addComponent('D');
+      ->component('E')->requires('B', 'C')
+      ->component('A')
+      ->component('B')
+      ->component('C')->requires('A', 'D')
+      ->component('D');
 
     $this->assertEquals($resolver->resolveDependencies(),
                   array('B', 'A', 'D', 'C', 'E'));
@@ -37,22 +37,22 @@ class DependencyResolverTest extends \PHPUnit_Framework_TestCase {
   public function testCircularDependency() {
     $resolver = new DependencyResolver();
     $resolver
-      ->addComponent('A', array('C'))
-      ->addComponent('B', array('A'))
-      ->addComponent('C', array('B'));
+      ->component('A')->requires('C')
+      ->component('B')->requires('A')
+      ->component('C')->requires('B');
 
     $resolver->resolveDependencies();
   }
 
   /**
    * @expectedException Exception
-   * @expectedExceptionMessage There is a component not defined: C 
+   * @expectedExceptionMessage There is a component not defined: C
    */
   public function testIdentifierMissing() {
     $resolver = new DependencyResolver();
     $resolver
-      ->addComponent('A', array('C'))
-      ->addComponent('B', array('C'));
+      ->component('A')->requires('C')
+      ->component('B')->requires('C');
 
     $resolver->resolveDependencies();
   }
@@ -64,41 +64,41 @@ class DependencyResolverTest extends \PHPUnit_Framework_TestCase {
   public function testInvalidIdentifier() {
     $resolver = new DependencyResolver();
     $resolver
-      ->addComponent(array('A'), array('C'))
-      ->addComponent('B', array('C'));
+      ->component(array('A'))->requires('C')
+      ->component('B')->requires('C');
 
     $resolver->resolveDependencies();
   }
 
   /**
    * @expectedException Exception
-   * @expectedExceptionMessage Dependencies for A must be an array.
+   * @expectedExceptionMessage Dependencies of A must be scalar.
    */
   public function testInvalidDependencies() {
     $resolver = new DependencyResolver();
     $resolver
-      ->addComponent('A', 'B')
-      ->addComponent('B');
+      ->component('A')->requires(['B'])
+      ->component('B');
 
     $resolver->resolveDependencies();
   }
 
   /**
    * @expectedException Exception
-   * @expectedExceptionMessage Dependencies of A must be an array of scalars.
+   * @expectedExceptionMessage Dependencies of A must be scalar.
    */
   public function testNoScalarDependencies() {
     $resolver = new DependencyResolver();
     $resolver
-      ->addComponent('A', array('B', array('C')))
-      ->addComponent('B');
+      ->component('A')->requires('B', array('C'))
+      ->component('B');
 
     $resolver->resolveDependencies();
   }
 
   public function testComplexTree() {
     $resolver = new DependencyResolver();
-    $resolver->addComponent('Component: 0');
+    $resolver->component('Component: 0');
     $components = array();
     $components[] = array(
      'id' => 'Component: 0',
@@ -117,7 +117,10 @@ class DependencyResolverTest extends \PHPUnit_Framework_TestCase {
         'id' => 'Component: ' . $i,
         'dependencies' => $dependencies,
       );
-      $resolver->addComponent('Component: ' . $i, $dependencies);
+      $resolver->component('Component: ' . $i);
+      foreach ($dependencies as $dependency) {
+        $resolver->requires($dependency);
+      }
     }
 
     $ordered = $resolver->resolveDependencies();

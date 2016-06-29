@@ -10,17 +10,31 @@ class DependencyResolver {
     $this->components = array();
   }
 
-  public function addComponent($id, $dependencies = array()) {
-    $component = new Component($id, $dependencies);
+  public function component($id) {
+    $component = new Component($id);
 
     if (empty($this->components[$component->id()])) {
       $this->components[$component->id()] = $component;
+    }
+    $this->lastComponent = $component;
+    return $this;
+  }
 
-      // Set all the dependencies to FALSE to detect missing dependencies later.
-      foreach ($component->dependencies() as $dependency) {
-        if (empty($this->components[$dependency])) {
-          $this->components[$dependency] = FALSE;
-        }
+  public function requires() {
+    $dependencies = func_get_args();
+    if (empty($dependencies)) {
+      return $this;
+    }
+    $component = $this->lastComponent;
+
+    foreach ($dependencies as $dependency) {
+      $component->addDependency($dependency);
+    }
+
+    // Set all the dependencies to FALSE to detect missing dependencies later.
+    foreach ($component->dependencies() as $dependency) {
+      if (empty($this->components[$dependency])) {
+        $this->components[$dependency] = FALSE;
       }
     }
     return $this;

@@ -17,7 +17,7 @@ $resolver
   ->component('ITEM 1')->requires('ITEM 3', 'ITEM 4') // Item 1 requires item 3 and 4.
   ->component('ITEM 2')->requires('ITEM 1')           // Item 2 requires item 1.
   ->component('ITEM 3')                               // Item 3 doesn't have dependencies.
-  ->component('ITEM 4');          ;                   // Item 4 doesn't have dependencies.
+  ->component('ITEM 4');                              // Item 4 doesn't have dependencies.
 
 $ordered = $resolver->resolveDependencies();
 print_r($ordered);
@@ -58,7 +58,7 @@ use mdagostino\DependencyResolver\DependencyResolver;
 $resolver = new DependencyResolver();
 $resolver
   ->component('A')->requires('B', 'C')
-  ->component('B'));
+  ->component('B');
 
   $ordered = $resolver->resolveDependencies();
   // Trow Exception: "There is a component not defined: C"

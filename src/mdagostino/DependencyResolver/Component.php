@@ -10,22 +10,12 @@ class Component {
   protected $dependencies;
   protected $required_by;
 
-  public function __construct($id, $dependencies = array()) {
+  public function __construct($id) {
     $this->id = $id;
     $this->dependencies = array();
 
     if (!is_scalar($id)) {
       throw new \Exception("The identifier must be an scalar (example: string, int)");
-    }
-    if (!is_array($dependencies)) {
-      throw new \Exception("Dependencies for " . $id . " must be an array.");
-    }
-
-    foreach ($dependencies as $dependency) {
-      if (!is_scalar($dependency)) {
-        throw new \Exception("Dependencies of " . $id . " must be an array of scalars.");
-      }
-      $this->dependencies[$dependency] = TRUE;
     }
     $this->required_by = array();
   }
@@ -43,6 +33,9 @@ class Component {
   }
 
   public function addDependency($dependency) {
+    if (!is_scalar($dependency)) {
+      throw new \Exception("Dependencies of " . $this->id() . " must be scalar.");
+    }
     $this->dependencies[$dependency] = TRUE;
   }
 

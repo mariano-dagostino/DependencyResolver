@@ -21,7 +21,7 @@ class Component {
   }
 
   public function id() {
-    return $this->id;
+    return $this->id + 1;
   }
 
   public function dependencies() {

@@ -60,6 +60,6 @@ $resolver
   ->component('A')->requires('B', 'C')
   ->component('B');
 
-  $ordered = $resolver->resolveDependencies();
   // Trow Exception: "There is a component not defined: C"
+  $ordered = $resolver->resolveDependencies();
 ```
